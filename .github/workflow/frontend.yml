@@ -1,0 +1,28 @@
+name: frontend-ecs-deployment
+on:
+ workflow_dispatch: {}
+ push: 
+  branches: 
+   - main
+jobs: 
+ name: ecs-deployment
+ runs-on: ubuntu-latest
+ steps: 
+ - name: checkout
+   uses: actions/checkout@v3
+ - name: nginx image
+   run: docker pull nginx
+ - name: docker tagging
+   run: docker tag nginx 878774248183.dkr.ecr.ap-south-1.amazonaws.com/kiran921996:latest
+ - name: login to aws
+   uses: aws-actions/configure-aws-credentials@v4
+   with:
+        aws-access-key-id: AKIA4ZGYG4L37A44NYKS
+        aws-secret-access-key: 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
+        aws-region: ap-south-1
+ - name: Login to Amazon ECR
+   id: login-ecr
+   uses: aws-actions/amazon-ecr-login@v2
+
+ - name: push to ECR repo
+   run: docker push 878774248183.dkr.ecr.ap-south-1.amazonaws.com/kiran921996:latest
