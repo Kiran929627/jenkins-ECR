@@ -26,3 +26,12 @@ jobs:
  
   - name: push to ECR repo
     run: docker push 878774248183.dkr.ecr.ap-south-1.amazonaws.com/kiran921996:latest
+  - name: render task definition
+    run: cp ./.aws/task-definition.json .
+  - name: Deploy to Amazon ECS
+    uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+    with:
+        task-definition: task-definition.json
+        service: fc-2
+        cluster: diatoz
+        wait-for-service-stability: true
